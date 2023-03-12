@@ -21,6 +21,8 @@ if (!function_exists('template_replace')) {
                     $value = $value->{$sub_item};
                 }
                 $subject = str_replace($key, $value, $subject);
+            } else {
+                $subject = str_replace($key, '', $subject);
             }
         }
         return $subject;

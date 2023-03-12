@@ -55,7 +55,7 @@
                 Status: <b class="{{ $result->status ? 'text-green-400' : 'text-red-500' }}">
                     @if($result->status && (!$settings->selectable_max <= 0 || $result->allotment_id))
                         {{ template_replace($settings->admission_result_selected_template, ['[ALLOTTED_INSTITUTION]' =>
-                        $result->allotted_institution], 'name')
+                        $result->allotted_institution ?? null], 'name')
                         }}
                         @else
                         {{ $settings->admission_result_not_selected_template }}

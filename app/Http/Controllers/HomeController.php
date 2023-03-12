@@ -87,11 +87,17 @@ class HomeController extends Controller
     public function resultShow(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:applicants,id',
-            'dob' => 'required|exists:applicants,dob',
+            'id' => 'required|numeric',
+            'dob' => 'required|date',
         ]);
-        $applicant = Applicant::where('remarks', '<>', 'deleted')->orWhereNull('remarks')->get(['name', 'dob', 'id', 'status', 'examcentre']);
-        $applicant = $applicant->where('id', $request->id)->where('dob', $request->dob)->first();
+        $applicant = Applicant::where(function ($query) {
+            return $query->where('remarks', '<>', 'deleted')
+                ->orWhereNull('remarks');
+        })
+            ->where('id', $request->id)->where('dob', $request->dob)
+            ->with(['examcentre', 'allotted_institution'])
+            ->select('name', 'dob', 'id', 'status', 'exam_centre_id', 'allotment_id')
+            ->first();
 
         if ($applicant) {
             return redirect()->route('results')->with(['result' => $applicant, 'code' => $applicant->examcentre->code]);
