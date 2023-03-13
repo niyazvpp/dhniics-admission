@@ -33,7 +33,7 @@ class CreateApplicantsTable extends Migration
             $table->string('state');
             $table->string('slug');
             $table->string('status')->nullable();
-            $table->foreign('allotment_id')->references('id')->on('institutions')->onDelete('cascade');
+            $table->foreignId('allotment_id')->nullable()->constrained('institutions')->onDelete('cascade');
             $table->string('remarks')->nullable();
             $table->timestamps();
         });
