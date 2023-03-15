@@ -53,6 +53,7 @@ class Settings
         } catch (\Throwable $th) {
         }
         $defaults = [
+            'header' => 'NIICS Darul Huda',
             'site_name' => 'NIICS || Darul Huda Islamic University Kerala',
             'academic_year' =>  date('Y') . ' - ' . (date('Y') - 1999),
             'header_first_line' => 'DARUL HUDA ISLAMIC UNIVERSITY KERALA',

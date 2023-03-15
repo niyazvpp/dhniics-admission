@@ -25,7 +25,7 @@
     class="fixed inset-0 z-50 flex items-center justify-center w-screen h-screen overflow-hidden text-3xl font-semibold text-gray-300 bg-gray-50 md:text-5xl">
     <div class="flex flex-col items-center justify-center w-full h-full">
         <div class="absolute w-full text-center animate-pinged">
-            <span class="relative inset-0 w-full animate-pulse">{{ $settings->site_name }}</span>
+            <span class="relative inset-0 w-full animate-pulse">{{ $settings->header }}</span>
         </div>
         <div class="absolute w-full pt-20 text-base text-center text-gray-700">
             Sending Data<span class="relative animate-width"></span>
@@ -46,7 +46,7 @@
     <h2 class="px-3 px-8 py-2 text-xl font-bold text-center text-white bg-gray-800 shadow-lg rounded-xl">Application
         Form</h2>
 </div>
-<h1 class="px-4 py-2 mt-2 text-xl text-center">Admission to 2023 - 24 Academic Year</h1>
+<h1 class="px-4 py-2 mt-2 text-xl text-center">Admission to {{ $settings->academic_year }} Academic Year</h1>
 
 <p class="px-4 py-2 my-2 text-lg text-center text-white bg-gray-400 shadow-lg">Already Registered? <a
         class="text-gray-300 hover:text-white hover:underline" href="{{ route('applications') }}">Search Your

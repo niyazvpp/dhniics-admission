@@ -1,6 +1,6 @@
 <h3 class="mb-2 text-2xl font-semibold text-gray-700">Settings</h3>
 <x-auth-validation-errors class="mb-4" :errors="$errors" />
-<form method="POST" action="{{ route('settings') }}">
+<form method="POST" action="{{ route('settings') }}" enctype="multipart/form-data">
     @csrf
     <div class="flex items-center justify-center my-4 form-wrapper">
         <div class="w-full grid-cols-4 sm:grid">
@@ -8,10 +8,16 @@
                 <h3 class="mb-3 ml-2 text-lg font-semibold text-left text-gray-700">General Settings</h3>
             </div>
 
+            <div class="mx-2 text-left">
+                <label for="header" class="label">Site Header:</label>
+                <input required type="text" id="header" name="header" value="{{ $settings->header ?? '' }}"
+                    autocomplete="header" placeholder="Please Use Shorter..." class="input">
+            </div>
+
             <div class="col-span-2 mx-2 text-left">
-                <label for="site_name" class="label">Site Name:</label>
+                <label for="site_name" class="label">Site Title:</label>
                 <input required type="text" id="site_name" name="site_name" value="{{ $settings->site_name ?? '' }}"
-                    autocomplete="site_name" placeholder="Please Use Shorter..." class="input">
+                    autocomplete="site_name" placeholder="What you view as tab title" class="input">
             </div>
             <div class="mx-2 text-left">
                 <label for="academic_year" class="label">Academic Year:</label>
@@ -41,6 +47,19 @@
                 <label for="description" class="label">Site Description:</label>
                 <textarea required type="text" id="description" name="description" autocomplete="description"
                     placeholder="Description For the Site" class="input">{{ $settings->description ?? '' }}</textarea>
+            </div>
+
+            <div class="col-span-2 mx-2 text-left">
+                <label for="site_logo" class="label">Site Logo:</label>
+                <img src="{{ asset('img/logo.png') }}" class="h-24 my-1" alt="Logo">
+                <input type="file" id="site_logo" name="site_logo" autocomplete="site_logo" class="input">
+            </div>
+
+            <div class="col-span-2 mx-2 text-left">
+                <label for="background_image" class="label">Background Image:</label>
+                <img src="{{ asset('img/campus.jpg') }}" class="h-24 my-1" alt="Campus">
+                <input type="file" id="background_image" name="background_image" autocomplete="background_image"
+                    class="input">
             </div>
 
             <div class="hidden col-span-4 sm:block" aria-hidden="true">

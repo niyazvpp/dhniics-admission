@@ -8,8 +8,8 @@
                 <div class="flex items-center shrink-0">
                     <a class="flex items-center justify-center" href="{{ route('home') }}">
                         <img class="block w-auto h-10 mr-3 fill-current" src="{{ asset('img/logo.png') }}"
-                            alt="{{ $settings->site_name }}">
-                        <div class="text-2xl font-bold text-gray-700 uppercase">{{ $settings->site_name }}</div>
+                            alt="{{ $settings->header }}">
+                        <div class="text-2xl font-bold text-gray-700 uppercase">{{ $settings->header }}</div>
                     </a>
                 </div>
 

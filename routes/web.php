@@ -18,9 +18,7 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/admission/apply');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/artisan/dev/dfdfdfdf/Gbcnxdf', function () {
     if (!defined('STDIN')) {

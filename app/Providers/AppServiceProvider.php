@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Cache::forget('settings');
+        // Cache::forget('settings');
         View::share([
             'settings' => settings()
         ]);

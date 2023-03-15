@@ -18,13 +18,14 @@ class HomeController extends Controller
 
     public function index()
     {
-        $applicants_results = settings('results_starting_at') && Carbon::today()->between(settings('results_starting_at'), settings('results_ending_at'));
+        $applicants_results = \settings('results_starting_at') && Carbon::today()->between(\settings('results_starting_at'), \settings('results_ending_at'));
         return view('home', ['title' => 'Home', 'robots' => 'index,follow', 'results' => $applicants_results]);
     }
 
     public function settingsStore(Request $request)
     {
         $rules = [
+            'header' => 'required|string|max:255',
             'starting_at' => 'required|date',
             'ending_at' => 'required|date|after_or_equal:starting_at',
             'results_starting_at' => 'required|date|after:ending_at',
@@ -36,13 +37,30 @@ class HomeController extends Controller
             'header_first_line' => 'required|string',
             'header_second_line' => 'required|string',
             'address_and_contact' => 'required|string',
-            'selectable_max' => 'required|numeric|min:1|max:' . Institution::count('id'),
+            'selectable_max' => 'required|numeric|min:0|max:' . Institution::count('id'),
             'selectable_min' => 'required|numeric|min:1|max:selectable_max',
             'description' => 'required|string',
             'admission_result_selected_template' => 'required|string',
             'admission_result_not_selected_template' => 'required|string',
+            'logo' => 'nullable|image|mimes:png|max:250',
+            'background_image' => 'nullable|image|mimes:jpg|max:1024',
         ];
         $request->validate($rules);
+
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $path = public_path('img/logo.png');
+            file_put_contents($path, file_get_contents($logo));
+        }
+
+        if ($request->hasFile('background_image')) {
+            $background_image = $request->file('background_image');
+            $path = public_path('img/campus.jpg');
+            file_put_contents($path, file_get_contents($background_image));
+        }
+
+        unset($rules['logo']);
+        unset($rules['background_image']);
 
         foreach (array_keys($rules) as $key) {
             Setting::updateOrCreate(['name' => $key], ['value' => $request->get($key)]);

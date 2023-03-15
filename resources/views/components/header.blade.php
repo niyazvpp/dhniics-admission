@@ -42,8 +42,8 @@
             </div>
             <div class="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
                 <div class="flex items-center flex-shrink-0 text-2xl font-bold text-white">
-                    <img class="w-auto h-8 mr-3" src="{{ asset('img/logo.png') }}" alt="{{ $settings->site_name }}">
-                    {{ $settings->site_name }}
+                    <img class="w-auto h-8 mr-3" src="{{ asset('img/logo.png') }}" alt="{{ $settings->header }}">
+                    {{ $settings->header }}
                 </div>
                 <div class="hidden sm:block sm:ml-6">
                     <div class="flex space-x-4">
