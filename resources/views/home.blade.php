@@ -109,8 +109,9 @@
             <div class="mb-4 text-xl font-medium">Admission to {{ $settings->academic_year }} is open!</div>
             <a class="px-4 py-2 mt-6 text-white bg-white border-2 border-white hover:bg-opacity-10 rounded-xl bg-opacity-5"
                 href="{{ route('apply') }}">Get Started</a>
-            <a class="px-4 py-2 mt-6 ml-2 text-white bg-white border-2 border-white hover:bg-opacity-10 rounded-xl bg-opacity-5"
-                href="{{ route('admission_details') }}">Admission Details</a>
+            <a target="_blank"
+                class="px-4 py-2 mt-6 ml-2 text-white bg-white border-2 border-white hover:bg-opacity-10 rounded-xl bg-opacity-5"
+                href="{{ asset('img/nat-admission.pdf') }}">Admission Details</a>
         </div>
     </div>
     @endif
