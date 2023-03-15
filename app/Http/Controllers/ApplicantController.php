@@ -121,7 +121,7 @@ class ApplicantController extends Controller
         // add a page
         $pdf->AddPage();
         // set the source file
-        $pdf->setSourceFile(storage_path('/app/application form - niics.pdf'));
+        $pdf->setSourceFile(storage_path('app/application form - niics.pdf'));
         // import page 1
         $tplIdx = $pdf->importPage(1);
         $pdf->SetMargins(0, 0, 0);
@@ -134,9 +134,6 @@ class ApplicantController extends Controller
         $pdf->SetFont('Helvetica');
         $pdf->setFontSize(10.5);
         $pdf->SetTextColor(0, 0, 0);
-
-        $pdf->SetXY(39, 75.25);
-        $pdf->Write(0, $data->id);
 
         $pdf->SetXY(168.5, 15);
         $pdf->Write(0, $data->examcentre->code . '/' . $data->id . '/2023');
@@ -219,7 +216,7 @@ class ApplicantController extends Controller
         $pdf->AddPage();
         $pdf->SetMargins(0, 0, 0);
         // set the source file
-        $pdf->setSourceFile(storage_path('/app/hallticket niics.pdf'));
+        $pdf->setSourceFile(storage_path('app/hallticket niics.pdf'));
         // import page 1
         $tplIdx = $pdf->importPage(1);
         $pdf->SetMargins(0, 0, 0);
