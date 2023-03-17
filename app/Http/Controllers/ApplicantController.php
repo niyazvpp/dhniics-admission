@@ -14,6 +14,7 @@ use setasign\Fpdi\Fpdi;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ApplicantController extends Controller
@@ -121,7 +122,7 @@ class ApplicantController extends Controller
         // add a page
         $pdf->AddPage();
         // set the source file
-        $pdf->setSourceFile(storage_path('app/application form - niics.pdf'));
+        $pdf->setSourceFile(storage_path('app/Niics Form.pdf'));
         // import page 1
         $tplIdx = $pdf->importPage(1);
         $pdf->SetMargins(0, 0, 0);
@@ -135,8 +136,11 @@ class ApplicantController extends Controller
         $pdf->setFontSize(10.5);
         $pdf->SetTextColor(0, 0, 0);
 
+        $pdf->SetXY(28, 15);
+        $pdf->Write(0, $data->id);
+
         $pdf->SetXY(168.5, 15);
-        $pdf->Write(0, $data->examcentre->code . '/' . $data->id . '/2023');
+        $pdf->Write(0, $data->ref_no);
 
         //insert image
         $filename = $data->slug . '-image.' . $data->image;
@@ -188,6 +192,11 @@ class ApplicantController extends Controller
             $pdf->Write(0, strtoupper($admission_options[2]));
         }
 
+        if (isset($admission_options[3])) {
+            $pdf->SetXY(110, 231.5);
+            $pdf->Write(0, strtoupper($admission_options[3]));
+        }
+
         $pdf->Output("I", 'application-form-' . $data->name . '.pdf');
         exit;
     }
@@ -216,7 +225,7 @@ class ApplicantController extends Controller
         $pdf->AddPage();
         $pdf->SetMargins(0, 0, 0);
         // set the source file
-        $pdf->setSourceFile(storage_path('app/hallticket niics.pdf'));
+        $pdf->setSourceFile(storage_path('app/Niics Hall Ticket.pdf'));
         // import page 1
         $tplIdx = $pdf->importPage(1);
         $pdf->SetMargins(0, 0, 0);
@@ -231,8 +240,11 @@ class ApplicantController extends Controller
         $pdf->setFontSize(10.5);
         $pdf->SetTextColor(0, 0, 0);
 
+        $pdf->SetXY(28, 15);
+        $pdf->Write(0, $data->id);
+
         $pdf->SetXY(169, 15);
-        $pdf->Write(0, $data->examcentre->code . '/' . $data->id . '/2023');
+        $pdf->Write(0, $data->ref_no);
 
         //insert image
         $filename = $data->slug . '-image.' . $data->image;
@@ -364,7 +376,7 @@ class ApplicantController extends Controller
             'declare' => 'bail|required|accepted',
             'dob' => 'bail|required|date|before_or_equal:' . $dob_end_date . '|after_or_equal:' . $dob_start_date,
             'email' => 'bail|required|email|max:255',
-            'exam_centre' => 'bail|required|numeric|exists:exam_centres,id',
+            'exam_centre' => 'bail|required|numeric',
             'guardian' => 'bail|required|max:255|min:4',
             'image' => 'bail|required|file|mimes:jpg,jpeg,png,pdf|max:512',
             'makthab' => 'bail|required|in:Yes,No',
@@ -413,6 +425,10 @@ class ApplicantController extends Controller
             }
         }
 
+        $exam_centre_code = ExamCentre::findOrFail($request->exam_centre, ['code'])->code;
+        $centre_applications_count = Applicant::where('exam_centre_id', $request->exam_centre)->count();
+
+        $applicant->ref_no = $exam_centre_code . '/' . ($centre_applications_count + 1) . '/' . date('Y');
         $applicant->slug = $slug;
         $applicant->exam_centre_id = $request->exam_centre;
 
@@ -529,10 +545,14 @@ class ApplicantController extends Controller
             $new_uploads++;
         }
 
-        Storage::move('uploads', 'deleted/uploads/' . $new_uploads);
+        if (Storage::exists('uploads'))
+            Storage::move('uploads', 'deleted/uploads/' . $new_uploads);
 
+        // disable foreign key checks first
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Applicant::truncate();
-        $count .=  'Application' . ($count == 1 ? 's' : '');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $count .=  'Application' . ($count > 1 ? 's' : '');
         return redirect()->route('dashboard')->with('message', $count . ' Deleted!');
     }
 

@@ -49,7 +49,7 @@
                 Name: <b>{{ $result->name }}</b>
             </div>
             <div class="py-1 border-b">
-                Ref No: <b>{{ session('code') }}/{{ $result->id }}/2023</b>
+                Ref No: <b>{{ session('code') }}</b>
             </div>
             <div class="py-1">
                 Status: <b class="{{ $result->status ? 'text-green-400' : 'text-red-500' }}">

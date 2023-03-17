@@ -11,6 +11,7 @@ class Applicant extends Model
 
     protected $fillable = [
         'address',
+        'ref_no',
         'city',
         'dob',
         'email',

@@ -118,7 +118,7 @@ class HomeController extends Controller
             ->first();
 
         if ($applicant) {
-            return redirect()->route('results')->with(['result' => $applicant, 'code' => $applicant->examcentre->code]);
+            return redirect()->route('results')->with(['result' => $applicant, 'code' => $applicant->ref_no]);
         }
 
         return back()->with('message', 'Incorrect Entry')->with('type', 'error');

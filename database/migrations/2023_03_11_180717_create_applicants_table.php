@@ -15,6 +15,7 @@ class CreateApplicantsTable extends Migration
     {
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
+            $table->string('ref_no')->unique();
             $table->string('address');
             $table->string('city');
             $table->date('dob');
