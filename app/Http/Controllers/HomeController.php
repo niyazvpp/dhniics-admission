@@ -114,7 +114,7 @@ class HomeController extends Controller
         })
             ->where('id', $request->id)->where('dob', $request->dob)
             ->with(['examcentre', 'allotted_institution'])
-            ->select('name', 'dob', 'id', 'status', 'exam_centre_id', 'allotment_id')
+            ->select('name', 'dob', 'id', 'status', 'exam_centre_id', 'allotment_id', 'ref_no')
             ->first();
 
         if ($applicant) {

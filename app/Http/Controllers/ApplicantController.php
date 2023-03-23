@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Applicant;
 use App\Http\Requests\StoreApplicantRequest;
 use App\Http\Requests\UpdateApplicantRequest;
+use App\Models\ApplicantInstitution;
 use App\Models\ExamCentre;
 use App\Models\Institution;
 use Illuminate\Support\Str;
@@ -177,7 +178,7 @@ class ApplicantController extends Controller
         $pdf->SetXY(110, 180);
         $pdf->Write(0, $data->mobile . ' , ' . $data->email);
 
-        $admission_options = $data->institutions()->pluck('name')->toArray();
+        $admission_options = $data->institutions->pluck('name')->toArray();
 
         $pdf->SetXY(110, 208.65);
         $pdf->Write(0, strtoupper($admission_options[0]));
@@ -434,7 +435,7 @@ class ApplicantController extends Controller
 
         $applicant->save();
         if ($max > 0) {
-            $applicant->institutions()->attach($request->admission_options);
+            $applicant->institutions()->sync($request->admission_options);
         }
 
         $cookie = $request->cookie('applied_applications_list');
@@ -521,7 +522,7 @@ class ApplicantController extends Controller
                 'type' => 'error'
             ]);
         }
-        $applicant = Applicant::all();
+        $applicant = Applicant::with('institutions')->get();
         if (!($count = count($applicant))) {
             return redirect()->route('dashboard')->with([
                 'message' => 'No Data Found!',
@@ -550,6 +551,7 @@ class ApplicantController extends Controller
 
         // disable foreign key checks first
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        ApplicantInstitution::truncate();
         Applicant::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $count .=  'Application' . ($count > 1 ? 's' : '');

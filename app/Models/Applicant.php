@@ -40,7 +40,10 @@ class Applicant extends Model
 
     public function institutions()
     {
-        return $this->belongsToMany(Institution::class, 'applicant_institutions', 'applicant_id', 'institution_id');
+        // latest applied institution will be at the end of the collection
+        return $this->belongsToMany(Institution::class, 'applicant_institutions', 'applicant_id', 'institution_id')
+            ->withPivot('id', 'applicant_id', 'institution_id', 'created_at')
+            ->orderBy('applicant_institutions.id', 'asc');
     }
 
     public function allotted_institution()

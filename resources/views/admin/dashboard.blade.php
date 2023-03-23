@@ -63,7 +63,8 @@
         data = data.map(n => {
             var centre = examcentres.find(centre => n.exam_centre_id == centre.id);
             var e = {
-                "Ref. No.": n.id,
+                "Roll No.": n.id,
+                "Ref. No.": n.ref_no,
                 "Name": n.name,
                 "Address": [n.address, n.city, n.state, n.postalcode + ' PIN'].join(', '),
                 "DOB": n.dob,
