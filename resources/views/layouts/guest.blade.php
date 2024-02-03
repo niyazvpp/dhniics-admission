@@ -85,7 +85,7 @@
     <meta name="twitter:card" content="summary" />
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css?ver=1.23') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css?ver=1.1') }}">
     <style type="text/css">
         [x-cloak] {
             display: none !important;

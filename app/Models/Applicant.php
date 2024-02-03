@@ -33,6 +33,8 @@ class Applicant extends Model
         'allotment_id'
     ];
 
+    protected $appends = ['roll_no'];
+
     public function examCentre()
     {
         return $this->belongsTo(ExamCentre::class);
@@ -49,5 +51,10 @@ class Applicant extends Model
     public function allotted_institution()
     {
         return $this->belongsTo(Institution::class, 'allotment_id');
+    }
+
+    public function getRollNoAttribute()
+    {
+        return ((int) $this->id) + 1000;
     }
 }

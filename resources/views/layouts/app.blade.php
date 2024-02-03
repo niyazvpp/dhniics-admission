@@ -14,7 +14,7 @@
     <meta name="robots" content="noindex,nofollow">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css?ver=1.23') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css?ver=1.1') }}">
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>

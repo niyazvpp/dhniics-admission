@@ -108,11 +108,12 @@ class HomeController extends Controller
             'id' => 'required|numeric',
             'dob' => 'required|date',
         ]);
+        $id = ((int) $request->id) - 1000;
         $applicant = Applicant::where(function ($query) {
             return $query->where('remarks', '<>', 'deleted')
                 ->orWhereNull('remarks');
         })
-            ->where('id', $request->id)->where('dob', $request->dob)
+            ->where('id', $id)->where('dob', $request->dob)
             ->with(['examcentre', 'allotted_institution'])
             ->select('name', 'dob', 'id', 'status', 'exam_centre_id', 'allotment_id', 'ref_no')
             ->first();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Applicant;
 use App\Http\Requests\StoreApplicantRequest;
 use App\Http\Requests\UpdateApplicantRequest;
+use App\Imports\ApplicantsImport;
 use App\Models\ApplicantInstitution;
 use App\Models\ExamCentre;
 use App\Models\Institution;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ApplicantController extends Controller
 {
@@ -26,7 +29,7 @@ class ApplicantController extends Controller
         $applications = Applicant::where('remarks', '<>', 'deleted')
             ->orWhereNull('remarks')
             ->paginate(100);
-        $applicationsAll = Applicant::with('institutions')->where('remarks', '<>', 'deleted')
+        $applicationsAll = Applicant::with(['institutions', 'allotted_institution'])->where('remarks', '<>', 'deleted')
             ->orWhereNull('remarks')
             ->get();
         $centres = ExamCentre::all();
@@ -138,7 +141,7 @@ class ApplicantController extends Controller
         $pdf->SetTextColor(0, 0, 0);
 
         $pdf->SetXY(28, 15);
-        $pdf->Write(0, $data->id);
+        $pdf->Write(0, $data->roll_no);
 
         $pdf->SetXY(168.5, 15);
         $pdf->Write(0, $data->ref_no);
@@ -242,7 +245,7 @@ class ApplicantController extends Controller
         $pdf->SetTextColor(0, 0, 0);
 
         $pdf->SetXY(28, 15);
-        $pdf->Write(0, $data->id);
+        $pdf->Write(0, $data->roll_no);
 
         $pdf->SetXY(169, 15);
         $pdf->Write(0, $data->ref_no);
@@ -427,7 +430,7 @@ class ApplicantController extends Controller
         }
 
         $exam_centre_code = ExamCentre::findOrFail($request->exam_centre, ['code'])->code;
-        $centre_applications_count = Applicant::where('exam_centre_id', $request->exam_centre)->count();
+        $centre_applications_count = (Applicant::where('exam_centre_id', $request->exam_centre)->count()) + 100;
 
         $applicant->ref_no = $exam_centre_code . '/' . ($centre_applications_count + 1) . '/' . date('Y');
         $applicant->slug = $slug;
@@ -561,5 +564,17 @@ class ApplicantController extends Controller
     public function ended()
     {
         return view('admission-ended');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|file|mimes:xlsx'
+        ]);
+
+        $file = $request->file('excel_file');
+        Excel::import(new ApplicantsImport, $file);
+
+        return redirect()->route('dashboard')->with('message', 'Data Imported Successfully!');
     }
 }

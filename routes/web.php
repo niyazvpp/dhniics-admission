@@ -5,7 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ExamCentreController;
 use App\Http\Controllers\InstitutionController;
-use Illuminate\Support\Facades\Artisan;
+// use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,16 +20,16 @@ use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/artisan/dev/dfdfdfdf/Gbcnxdf', function () {
-    if (!defined('STDIN')) {
-        define('STDIN', fopen('php://stdin', 'r'));
-    }
-    Artisan::call('config:cache');
-    Artisan::call('route:cache');
-    Artisan::call('view:cache');
-    Artisan::call('optimize');
-    return 'done';
-});
+// Route::get('/artisan/dev/dfdfdfdf/Gbcnxdf', function () {
+//     if (!defined('STDIN')) {
+//         define('STDIN', fopen('php://stdin', 'r'));
+//     }
+//     Artisan::call('config:cache');
+//     Artisan::call('route:cache');
+//     Artisan::call('view:cache');
+//     Artisan::call('optimize');
+//     return 'done';
+// });
 
 Route::middleware("adminOrAdmissionDate")->group(function () {
     Route::get('/hallticket/{slug}/print', [ApplicantController::class, 'hallTicket'])->name('hallticket');
@@ -71,6 +71,8 @@ Route::post('/admin/exam_centres/delete/{examCentre}', [ExamCentreController::cl
 Route::post('/admin/institutions/create', [InstitutionController::class, 'store'])->middleware(['auth'])->name('institutions.create');
 Route::post('/admin/institutions/update/{institution}', [InstitutionController::class, 'update'])->middleware(['auth'])->name('institutions.update');
 Route::post('/admin/institutions/delete/{institution}', [InstitutionController::class, 'delete'])->middleware(['auth'])->name('institutions.delete');
+
+Route::post('/admin/results/import', [ApplicantController::class, 'import'])->middleware(['auth'])->name('results.import');
 
 // Route::get('/exam-results-2022', [HomeController::class, 'marksheet'])->name('marksheet');
 // Route::post('/exam-results-2022', [HomeController::class, 'marksheetPost']);
