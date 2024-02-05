@@ -183,8 +183,10 @@ class ApplicantController extends Controller
 
         $admission_options = $data->institutions->pluck('name')->toArray();
 
-        $pdf->SetXY(110, 208.65);
-        $pdf->Write(0, strtoupper($admission_options[0]));
+        if (isset($admission_options[0])) {
+            $pdf->SetXY(110, 208.65);
+            $pdf->Write(0, strtoupper($admission_options[0]));
+        }
 
         if (isset($admission_options[1])) {
             $pdf->SetXY(110, 216.15);
